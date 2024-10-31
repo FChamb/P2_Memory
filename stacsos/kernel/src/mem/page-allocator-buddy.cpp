@@ -31,30 +31,54 @@ void page_allocator_buddy::dump() const {
 }
 
 void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
-    u64 pfn = range_start.pfn();
+    int order = LastOrder;
     while (page_count > 0) {
-        int order = LastOrder;
-        while (pages_per_block(order) > page_count || !block_aligned(order, pfn)) {
+        u64 block_size = pages_per_block(order);
+
+        // Find the largest block that fits into the remaining page count.
+        while (block_size > page_count) {
             order--;
+            block_size = pages_per_block(order);
         }
+
+        // Insert the block at the given order.
         insert_free_block(order, range_start);
-        page_count -= pages_per_block(order);
-        pfn += pages_per_block(order);
-        range_start = *page::get_from_pfn(pfn);
+
+        // Calculate the next page in the range to continue inserting.
+        u64 next_block_pfn = range_start.pfn() + block_size;
+        range_start = page::get_from_pfn(next_block_pfn);
+
+        // Reduce the page count by the size of the inserted block.
+        page_count -= block_size;
+
+        // Update the total count of free pages.
+        total_free_ += block_size;
     }
 }
 
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
-    u64 pfn = range_start.pfn();
+    int order = LastOrder;
     while (page_count > 0) {
-        int order = 0;
-        while (pages_per_block(order + 1) <= page_count && block_aligned(order + 1, pfn)) {
-            order++;
+        u64 block_size = pages_per_block(order);
+
+        // Find the largest block that fits into the remaining page count.
+        while (block_size > page_count) {
+            order--;
+            block_size = pages_per_block(order);
         }
+
+        // Remove the block from the free list.
         remove_free_block(order, range_start);
-        page_count -= pages_per_block(order);
-        pfn += pages_per_block(order);
-        range_start = *page::get_from_pfn(pfn);
+
+        // Calculate the next page in the range to continue removing.
+        u64 next_block_pfn = range_start.pfn() + block_size;
+        range_start = page::get_from_pfn(next_block_pfn);
+
+        // Reduce the page count by the size of the removed block.
+        page_count -= block_size;
+
+        // Update the total count of free pages.
+        total_free_ -= block_size;
     }
 }
 
@@ -98,83 +122,94 @@ void page_allocator_buddy::remove_free_block(int order, page &block_start) {
 }
 
 void page_allocator_buddy::split_block(int order, page &block_start) {
+    // Ensure the order is within range and we have space to split
     assert(order > 0 && order <= LastOrder);
-    int lower_order = order - 1;
-    page &buddy = *page::get_from_pfn(block_start.pfn() + pages_per_block(lower_order));
 
-    insert_free_block(lower_order, block_start);
-    insert_free_block(lower_order, buddy);
+    // Remove the block from the current free list
+    remove_free_block(order, block_start);
+
+    // Split into two buddies of the next lower order
+    int lower_order = order - 1;
+    u64 block_size = pages_per_block(lower_order);
+
+    page &buddy1 = block_start;
+    page &buddy2 = page::get_from_pfn(buddy1.pfn() + block_size);
+
+    insert_free_block(lower_order, buddy1);
+    insert_free_block(lower_order, buddy2);
 
 }
 
-//void page_allocator_buddy::merge_buddies(int order, page &buddy) {
-//    panic("TODO");
-//}
-//
-//page *page_allocator_buddy::allocate_pages(int order, page_allocation_flags flags) {
-//    panic("TODO");
-//}
-//
-//void page_allocator_buddy::free_pages(page &block_start, int order) {
-//    panic("TODO");
-//}
-
 void page_allocator_buddy::merge_buddies(int order, page &block_start) {
-    u64 buddy_pfn = block_start.pfn() ^ pages_per_block(order);
-    page *buddy = page::get_from_pfn(buddy_pfn);
+    // Ensure order is within range
+    assert(order >= 0 && order < LastOrder);
 
-    if (buddy->next_free_ != nullptr) { // Check if buddy is free
-        remove_free_block(order, *buddy);
+    u64 block_size = pages_per_block(order);
+    u64 buddy_pfn = block_start.pfn() ^ block_size;
+    page &buddy = page::get_from_pfn(buddy_pfn);
 
-        page &merged_block = (buddy->pfn() < block_start.pfn()) ? *buddy : block_start;
+    // Ensure buddy is free and aligned to order
+    if (buddy.state_ == page_state::free && block_aligned(order, buddy.pfn())) {
+        // Remove both blocks from the free list
+        remove_free_block(order, block_start);
+        remove_free_block(order, buddy);
+
+        // Merge into a higher-order block
+        page &merged_block = (buddy.pfn() < block_start.pfn()) ? buddy : block_start;
         insert_free_block(order + 1, merged_block);
     }
 }
 
 page *page_allocator_buddy::allocate_pages(int order, page_allocation_flags flags) {
+    // Ensure requested order is within range
     if (order < 0 || order > LastOrder) {
         return nullptr;
     }
 
+    // Find the smallest available block at or above the requested order
     int current_order = order;
-    while (current_order <= LastOrder && free_list_[current_order] == nullptr) {
+    while (current_order <= LastOrder && !free_list_[current_order]) {
         current_order++;
     }
 
+    // No available blocks
     if (current_order > LastOrder) {
         return nullptr;
     }
 
-    page *block = free_list_[current_order];
+    // Continuously split blocks until reaching the requested order
     while (current_order > order) {
-        split_block(current_order, *block);
+        page &block = *free_list_[current_order];
+        split_block(current_order, block);
         current_order--;
     }
 
-    remove_free_block(order, *block);
-    return block;
+    // Allocate the block at the desired order
+    page *allocated_block = free_list_[order];
+    remove_free_block(order, *allocated_block);
+    allocated_block->state_ = page_state::allocated;
+    total_free_ -= pages_per_block(order);
+    return allocated_block;
 }
 
 void page_allocator_buddy::free_pages(page &block_start, int order) {
+    // Ensure order is within range
     assert(order >= 0 && order <= LastOrder);
+
+    block_start.state_ = page_state::free;
     insert_free_block(order, block_start);
+    total_free_ += pages_per_block(order);
 
-    int current_order = order;
-    while (current_order < LastOrder) {
-        u64 buddy_pfn = block_start.pfn() ^ pages_per_block(current_order);
-        page *buddy = page::get_from_pfn(buddy_pfn);
+    // Attempt to merge with buddies
+    while (order < LastOrder) {
+        u64 buddy_pfn = block_start.pfn() ^ pages_per_block(order);
+        page &buddy = page::get_from_pfn(buddy_pfn);
 
-        if (buddy->next_free_ == nullptr) {
-            break; // Buddy is allocated
+        if (buddy.state_ != page_state::free || !block_aligned(order, buddy.pfn())) {
+            break;
         }
 
-        remove_free_block(current_order, *buddy);
-
-        if (buddy->pfn() < block_start.pfn()) {
-            block_start = *buddy;
-        }
-
-        current_order++;
-        insert_free_block(current_order, block_start);
+        merge_buddies(order, block_start);
+        order++;
     }
 }
