@@ -30,9 +30,20 @@ void page_allocator_buddy::dump() const {
     }
 }
 
+/**
+ * Inserts a range of pages into the free lists, breaking them down into the
+ * largest blocks that fit within the remaining page count. Each block is added
+ * at the appropriate order level.
+ *
+ * @param range_start - Starting page in the range to insert
+ * @param page_count - Number of pages to insert
+ */
 void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
     int order = LastOrder;
+
+    // Remove pages until no pages remain in range
     while (page_count > 0) {
+        // Find the block size for the current order
         u64 block_size = pages_per_block(order);
 
         // Find the largest block that fits into the remaining page count.
@@ -56,8 +67,17 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
     }
 }
 
+/**
+ * Removes a range of pages from the free lists, breaking them down into blocks
+ * and removing each from the appropriate order level.
+ *
+ * @param range_start - Starting page in the range to remove
+ * @param page_count - Number of pages to remove
+ */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
     int order = LastOrder;
+
+    // Remove pages until no pages remain in range
     while (page_count > 0) {
         u64 block_size = pages_per_block(order);
 
@@ -121,8 +141,14 @@ void page_allocator_buddy::remove_free_block(int order, page &block_start) {
     target->next_free_ = nullptr;
 }
 
+/**
+ * Removes a free block of a specific order from the free list.
+ *
+ * @param order - Order of the block to remove
+ * @param block_start - The starting page of the block to remove
+ */
 void page_allocator_buddy::split_block(int order, page &block_start) {
-    // Ensure the order is within range and we have space to split
+    // Ensure the order is valid
     assert(order > 0 && order <= LastOrder);
 
     // Remove the block from the current free list
@@ -140,6 +166,12 @@ void page_allocator_buddy::split_block(int order, page &block_start) {
 
 }
 
+/**
+ * Merges a free block with its buddy to form a larger block at the next higher order.
+ *
+ * @param order - Current order of the block and its buddy
+ * @param block_start - The starting page of the block to merge
+ */
 void page_allocator_buddy::merge_buddies(int order, page &block_start) {
     // Ensure order is within range
     assert(order >= 0 && order < LastOrder);
@@ -160,6 +192,14 @@ void page_allocator_buddy::merge_buddies(int order, page &block_start) {
     }
 }
 
+/**
+ * Allocates pages by finding a free block of the requested order.
+ * If no blocks of that order are available, higher order blocks are split.
+ *
+ * @param order - Order of pages to allocate
+ * @param flags - Allocation flags (optional)
+ * @return - Pointer to the allocated block, or nullptr if no block available
+ */
 page *page_allocator_buddy::allocate_pages(int order, page_allocation_flags flags) {
     // Ensure requested order is within range
     if (order < 0 || order > LastOrder) {
