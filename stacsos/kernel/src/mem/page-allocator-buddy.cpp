@@ -30,6 +30,19 @@ void page_allocator_buddy::dump() const {
     }
 }
 
+void page_allocator_buddy::dump_free_list() const {
+    dprintf("*** Free List State ***\n");
+    for (int i = 0; i <= LastOrder; i++) {
+        dprintf("Order %d: ", i);
+        page *current = free_list_[i];
+        while (current) {
+            dprintf("PFN %llu ", current->pfn());
+            current = current->next_free_;
+        }
+        dprintf("\n");
+    }
+}
+
 /**
  * Inserts a range of pages into the free lists, breaking them down into the
  * largest blocks that fit within the remaining page count. Each block is added
@@ -39,29 +52,27 @@ void page_allocator_buddy::dump() const {
  * @param page_count - Number of pages to insert
  */
 void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
-    // Calculate the starting page frame number
     u64 start_pfn = range_start.pfn();
     u64 end_pfn = start_pfn + page_count;
 
-    // Traverse through all pages in the range to insert
     while (start_pfn < end_pfn) {
-        int order = LastOrder;
-
-        // Find the largest possible order for the current block that does not exceed boundaries
-        while (order > 0 && ((start_pfn + pages_per_block(order)) > end_pfn || !block_aligned(order, start_pfn))) {
-            order--;
+        // Determine the highest order block we can create from the pages
+        int order = 0;
+        while (order <= LastOrder && (start_pfn + pages_per_block(order)) <= end_pfn) {
+            order++;
         }
+        order--;  // Adjust to the last valid order
 
-        // Get the page corresponding to this start_pfn
+        // Get the page corresponding to the start_pfn
         page &block_start = page::get_from_pfn(start_pfn);
 
-        // Set the free block size to current order (for later reference)
-        block_start.free_block_size_ = pages_per_block(order);
+        // Debugging: Print the block being inserted and its order
+        dprintf("Inserting block: start_pfn=%llu, order=%d\n", start_pfn, order);
 
-        // Insert the block into the appropriate free list
+        // Insert the block into the free list
         insert_free_block(order, block_start);
 
-        // Move the start pfn by the size of this block to continue with the next segment
+        // Move to the next block in the range
         start_pfn += pages_per_block(order);
     }
 }
@@ -129,8 +140,9 @@ void page_allocator_buddy::remove_free_block(int order, page &block_start) {
         candidate_slot = &((*candidate_slot)->next_free_);
     }
 
-    // Debugging: Check what is found in candidate_slot
+    // Debugging: Check the current status of the candidate slot
     if (*candidate_slot != target) {
+        dprintf("Candidate slot found: PFN %llu\n", (*candidate_slot ? (*candidate_slot)->pfn() : -1));
         dprintf("Error: Block to remove not found in free list for order %d. Block start PFN: %llu\n", order, block_start.pfn());
         panic("Block not found in free list");
     }

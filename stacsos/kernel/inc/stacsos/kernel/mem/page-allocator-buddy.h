@@ -27,6 +27,7 @@ public:
 	virtual void free_pages(page &base, int order) override;
 
 	virtual void dump() const override;
+    virtual void dump_free_list() const;
 
 private:
 	static const int LastOrder = 16;
