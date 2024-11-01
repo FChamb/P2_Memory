@@ -74,26 +74,38 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
  * @param page_count - Number of pages to remove
  */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
-    while (page_count > 0) {
-        int order = LastOrder;
-        u64 block_size = pages_per_block(order);
+    // Get the starting page frame number for the removal
+    u64 start_pfn = range_start.pfn();
+    u64 end_pfn = start_pfn + page_count;
 
-        // Find the largest block that fits into the remaining page count.
-        while (block_size > page_count && order > 0) {
-            order--;
-            block_size = pages_per_block(order);
+    // Traverse through all pages in the specified range
+    while (start_pfn < end_pfn) {
+        int order = 0;
+
+        // Determine the appropriate order for the current block
+        while (order < LastOrder && !block_aligned(order, start_pfn)) {
+            order++;
         }
 
-        // Remove the block from the free list.
-        remove_free_block(order, range_start);
+        // Ensure we find the highest order that can be removed
+        while (order < LastOrder && (start_pfn + pages_per_block(order)) <= end_pfn) {
+            order++;
+        }
 
-        // Calculate the next page in the range to continue removing.
-        u64 next_block_pfn = range_start.pfn() + block_size;
-        range_start = page::get_from_pfn(next_block_pfn);
+        // We step back to the last valid order that fits
+        order--;
 
-        // Reduce the page count by the size of the removed block.
-        page_count -= block_size;
-        total_free_ -= block_size;
+        // Check that we found a valid order
+        assert(order >= 0 && order <= LastOrder);
+
+        // Get the page corresponding to the start_pfn
+        page &block_start = page::get_from_pfn(start_pfn);
+
+        // Remove the block from the free list
+        remove_free_block(order, block_start);
+
+        // Move to the next block in the range
+        start_pfn += pages_per_block(order);
     }
 }
 
