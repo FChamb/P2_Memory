@@ -45,37 +45,24 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
 
     // Traverse through all pages in the range to insert
     while (start_pfn < end_pfn) {
-        // Find the largest possible order for the current block that does not exceed boundaries
         int order = LastOrder;
 
-        // Adjust the order to fit within the available pages
+        // Find the largest possible order for the current block that does not exceed boundaries
         while (order > 0 && ((start_pfn + pages_per_block(order)) > end_pfn || !block_aligned(order, start_pfn))) {
             order--;
         }
 
-        // If a valid order is found
-        if (order >= 0) {
-            // Get the page corresponding to this start_pfn
-            page &block_start = page::get_from_pfn(start_pfn);
+        // Get the page corresponding to this start_pfn
+        page &block_start = page::get_from_pfn(start_pfn);
 
-            // Use find_index to check if the block already exists
-            if (find_index(order, block_start) == -1) {
-                // Set the free block size to current order (for later reference)
-                block_start.free_block_size_ = pages_per_block(order);
+        // Set the free block size to current order (for later reference)
+        block_start.free_block_size_ = pages_per_block(order);
 
-                // Insert the block into the appropriate free list
-                insert_free_block(order, block_start);
-            } else {
-                // Handle the case where the block already exists if necessary
-                // (e.g., log a warning or skip insertion)
-            }
+        // Insert the block into the appropriate free list
+        insert_free_block(order, block_start);
 
-            // Move the start pfn by the size of this block to continue with the next segment
-            start_pfn += pages_per_block(order);
-        } else {
-            // If no valid order can be found, break the loop
-            break;
-        }
+        // Move the start pfn by the size of this block to continue with the next segment
+        start_pfn += pages_per_block(order);
     }
 }
 
@@ -88,27 +75,27 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
  */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
     while (page_count > 0) {
-        // Find the order of the current range_start
+        // Find the order for the current starting page
         int order = find_order(range_start);
+
         if (order == -1) {
-            dprintf("Error: Range start (PFN=%lx) not found in any free list.\n", range_start.pfn());
-            return; // Handle the error as appropriate
+            // If no order found, exit (block not in free list)
+            return; // Error: range_start is not in free list
         }
 
-        // Check if the block at the current order is in the free list
-        int index = find_index(order, range_start);
-        if (index == -1) {
-            dprintf("Error: Block not found in free list for PFN=%lx, ORDER=%d\n", range_start.pfn(), order);
-            return; // Handle the error as appropriate
-        }
-
-        // Get the size of the block at the found order
+        // Calculate the block size for the found order
         u64 block_size = pages_per_block(order);
+
+        // Check if we can remove a full block
+        if (block_size > page_count) {
+            // If the block size is greater than the remaining page count, exit
+            return; // Error: Not enough pages to remove
+        }
 
         // Remove the block from the free list.
         remove_free_block(order, range_start);
 
-        // Move the start page frame number by the size of the removed block
+        // Calculate the next page in the range to continue removing.
         u64 next_block_pfn = range_start.pfn() + block_size;
         range_start = page::get_from_pfn(next_block_pfn);
 
@@ -127,13 +114,11 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
  * @return - The order of the block if found, otherwise -1
  */
 int page_allocator_buddy::find_order(page &range_start) const {
-    // Check all orders to find the order for the given range_start
-    for (int order = 0; order <= LastOrder; order++) {
+    for (int order = 0; order <= LastOrder; ++order) {
         page *current = free_list_[order];
         while (current) {
-            // Check if current block includes range_start
-            if (current->base_address() <= range_start.base_address() && current->base_address() + pages_per_block(order) > range_start.base_address()) {
-                return order; // Found the order
+            if (current->base_address() == range_start.base_address()) {
+                return order; // Found the order containing range_start
             }
             current = current->next_free_;
         }
@@ -151,13 +136,15 @@ int page_allocator_buddy::find_order(page &range_start) const {
 int page_allocator_buddy::find_index(int order, page &range_start) const {
     page *current = free_list_[order];
     int index = 0;
+
     while (current) {
         if (current->base_address() == range_start.base_address()) {
-            return index; // Found index of the block in the free list
+            return index; // Found the block
         }
         current = current->next_free_;
         index++;
     }
+
     return -1; // Not found
 }
 
