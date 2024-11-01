@@ -53,6 +53,9 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
         page &block_start = page::get_from_pfn(start_pfn);
         block_start.free_block_size_ = pages_per_block(order); // Track size if needed
 
+        // Debugging to see insert
+        dprintf("Inserting block: start_pfn=%llu, order=%d\n", start_pfn, order);
+
         // Insert the block into the appropriate free list
         insert_free_block(order, block_start);
 
@@ -69,6 +72,11 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
  * @param page_count - Number of pages to remove
  */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
+    if (range_start.state_ != page_state::free) {
+        dprintf("Error: Attempting to remove a non-free page (PFN=%llu)\n", range_start.pfn());
+        panic("NO");
+    }
+
     u64 start_pfn = range_start.pfn();
     u64 end_pfn = start_pfn + page_count;
 
@@ -82,7 +90,7 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
         page &block_start = page::get_from_pfn(start_pfn);
 
         // Debugging: Print the block being removed and its order
-        dprintf("Removing block: start_pfn=%llu, order=%d\n", start_pfn, order);
+        dprintf("Attempting to remove block: PFN=%llu, order=%d\n", start_pfn, order);
 
         // Attempt to remove the block from the free list
         remove_free_block(order, block_start);
@@ -99,7 +107,7 @@ void page_allocator_buddy::insert_free_block(int order, page &block_start) {
     page **slot = &free_list_[order];
 
     // Insert the block in sorted order in the free list.
-    while (*slot && *slot < target) {
+    while (*slot && (*slot)->pfn() < target->pfn()) {
         slot = &((*slot)->next_free_);
     }
 
@@ -120,6 +128,14 @@ void page_allocator_buddy::remove_free_block(int order, page &block_start) {
     }
 
     // Debugging: Check what is found in candidate_slot
+
+    if (*candidate_slot == nullptr) {
+        dprintf("Error: Block to remove not found in free list for order %d. Block start PFN: %llu\n", order, block_start.pfn());
+        panic("Block not found in free list");
+    } else {
+        dprintf("Found block to remove: PFN=%llu, Order=%d\n", target->pfn(), order);
+    }
+
     if (*candidate_slot != target) {
         dprintf("Error: Block to remove not found in free list for order %d. Block start PFN: %llu\n", order, block_start.pfn());
         panic("Block not found in free list");
