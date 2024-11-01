@@ -30,19 +30,6 @@ void page_allocator_buddy::dump() const {
     }
 }
 
-void page_allocator_buddy::dump_free_list() const {
-    dprintf("*** Free List State ***\n");
-    for (int i = 0; i <= LastOrder; i++) {
-        dprintf("Order %d: ", i);
-        page *current = free_list_[i];
-        while (current) {
-            dprintf("PFN %llu ", current->pfn());
-            current = current->next_free_;
-        }
-        dprintf("\n");
-    }
-}
-
 /**
  * Inserts a range of pages into the free lists, breaking them down into the
  * largest blocks that fit within the remaining page count. Each block is added
@@ -140,9 +127,8 @@ void page_allocator_buddy::remove_free_block(int order, page &block_start) {
         candidate_slot = &((*candidate_slot)->next_free_);
     }
 
-    // Debugging: Check the current status of the candidate slot
+    // Debugging: Check what is found in candidate_slot
     if (*candidate_slot != target) {
-        dprintf("Candidate slot found: PFN %llu\n", (*candidate_slot ? (*candidate_slot)->pfn() : -1));
         dprintf("Error: Block to remove not found in free list for order %d. Block start PFN: %llu\n", order, block_start.pfn());
         panic("Block not found in free list");
     }
