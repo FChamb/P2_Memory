@@ -74,17 +74,17 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
  * @param page_count - Number of pages to remove
  */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
-    int order = LastOrder;
-
-    // Remove pages until no pages remain in range
     while (page_count > 0) {
-        u64 block_size = pages_per_block(order);
+        // Find the order for the current starting page
+        int order = find_order(range_start);
 
-        // Find the largest block that fits into the remaining page count.
-        while (block_size > page_count) {
-            order--;
-            block_size = pages_per_block(order);
+        if (order == -1) {
+            // If no order found, exit (block not in free list)
+            return;
         }
+
+        // Calculate the block size for the found order
+        u64 block_size = pages_per_block(order);
 
         // Remove the block from the free list.
         remove_free_block(order, range_start);
@@ -99,6 +99,47 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
         // Update the total count of free pages.
         total_free_ -= block_size;
     }
+}
+
+/**
+ * Finds the order of the block containing the given range start.
+ *
+ * @param range_start - The starting page for which to find the order
+ * @return - The order of the block if found, otherwise -1
+ */
+int page_allocator_buddy::find_order(page &range_start) const {
+    for (int order = 0; order <= LastOrder; ++order) {
+        page *current = free_list_[order];
+        while (current) {
+            if (current->base_address() == range_start.base_address()) {
+                return order; // Found the order containing range_start
+            }
+            current = current->next_free_;
+        }
+    }
+    return -1; // Not found
+}
+
+/**
+ * Finds the index in the free list of a specific order where the range start is located.
+ *
+ * @param order - The order of the block to search in
+ * @param range_start - The starting page to find
+ * @return - The index of the free block if found, otherwise -1
+ */
+int page_allocator_buddy::find_index(int order, page &range_start) const {
+    page *current = free_list_[order];
+    int index = 0;
+
+    while (current) {
+        if (current->base_address() == range_start.base_address()) {
+            return index; // Found the block
+        }
+        current = current->next_free_;
+        index++;
+    }
+
+    return -1; // Not found
 }
 
 void page_allocator_buddy::insert_free_block(int order, page &block_start) {

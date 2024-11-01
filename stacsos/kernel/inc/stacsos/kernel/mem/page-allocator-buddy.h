@@ -28,6 +28,9 @@ namespace stacsos::kernel::mem {
 
         virtual void dump() const override;
 
+        virtual int find_order(page &range_start) const;
+        virtual int find_index(int order, page &range_start) const;
+
     private:
         static const int LastOrder = 16;
 
