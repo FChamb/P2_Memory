@@ -80,11 +80,17 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
 
         if (order == -1) {
             // If no order found, exit (block not in free list)
-            return;
+            return; // Error: range_start is not in free list
         }
 
         // Calculate the block size for the found order
         u64 block_size = pages_per_block(order);
+
+        // Check if we can remove a full block
+        if (block_size > page_count) {
+            // If the block size is greater than the remaining page count, exit
+            return; // Error: Not enough pages to remove
+        }
 
         // Remove the block from the free list.
         remove_free_block(order, range_start);
@@ -111,7 +117,9 @@ int page_allocator_buddy::find_order(page &range_start) const {
     for (int order = 0; order <= LastOrder; ++order) {
         page *current = free_list_[order];
         while (current) {
-            if (current->base_address() == range_start.base_address()) {
+            // Check if the current page address matches range_start
+            if (current->base_address() == range_start.base_address() &&
+                block_aligned(order, current->pfn())) {
                 return order; // Found the order containing range_start
             }
             current = current->next_free_;
