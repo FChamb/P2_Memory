@@ -130,33 +130,43 @@ void page_allocator_buddy::insert_free_block(int order, page &block_start) {
 }
 
 void page_allocator_buddy::remove_free_block(int order, page &block_start) {
-    // Validate that the order is within range.
+    // Ensure the order is within bounds.
     assert(order >= 0 && order <= LastOrder);
 
-    // Check alignment for this order.
+    // Check the block's alignment for the specified order.
     assert(block_aligned(order, block_start.pfn()));
 
     dprintf("Attempting to remove block at %lx with order %d\n", block_start.base_address(), order);
 
-    // Begin searching in the free list for the specified order.
+    // Set up to find the target block in the free list.
     page *target = &block_start;
     page **candidate_slot = &free_list_[order];
 
-    // Traverse the free list at this order.
+    // Debug output to check the contents of the free list before removal.
+    dprintf("Free list at order %d before removal:\n", order);
+    page *current = free_list_[order];
+    while (current) {
+        dprintf("Block at %lx\n", current->base_address());
+        current = current->next_free_;
+    }
+
+    // Traverse the free list looking for the target block.
     while (*candidate_slot && *candidate_slot != target) {
         candidate_slot = &((*candidate_slot)->next_free_);
     }
 
-    // Confirm that the target block was found.
+    // If target block not found, trigger an assertion and dump the free list.
     if (*candidate_slot != target) {
         dprintf("Error: Target block at %lx not found in free list at order %d\n", block_start.base_address(), order);
-        dump();  // Display current state of the free list to help diagnose issues.
-        assert(false);  // Fail the assertion to indicate inconsistency.
+        dump();  // Full dump of the free list state.
+        assert(false);  // Force failure to help locate issue.
     }
 
-    // Remove the target block from the free list.
+    // If found, remove the target block from the free list.
     *candidate_slot = target->next_free_;
     target->next_free_ = nullptr;
+
+    dprintf("Block at %lx successfully removed from order %d\n", block_start.base_address(), order);
 }
 
 /**
