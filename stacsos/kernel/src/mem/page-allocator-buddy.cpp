@@ -41,32 +41,29 @@ void page_allocator_buddy::dump() const {
 void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
     dprintf("Inserting pages starting at %lx, count: %llu\n", range_start.base_address(), page_count);
 
-    u64 remaining_pages = page_count;
     page *current = &range_start;
+    while (page_count > 0) {
+        int order = 0;
 
-    while (remaining_pages > 0) {
-        int order = LastOrder;
-
-        // Adjust order for alignment and size.
-        while (order > 0 && (pages_per_block(order) > remaining_pages || !block_aligned(order, current->pfn()))) {
-            order--;
+        // Determine the maximum possible order for insertion.
+        while ((order < LastOrder) &&
+               (pages_per_block(order + 1) <= page_count) &&
+               block_aligned(order + 1, current->pfn())) {
+            order++;
         }
+
+        // Check alignment and address consistency
+        assert(block_aligned(order, current->pfn()));
 
         dprintf("Inserting block at %lx with order %d\n", current->base_address(), order);
 
-        // Ensure alignment.
-        assert(block_aligned(order, current->pfn()));
-
-        current->free_block_size_ = pages_per_block(order);
-
+        // Insert the block into the free list
         insert_free_block(order, *current);
 
-        remaining_pages -= pages_per_block(order);
-        current = &page::get_from_pfn(current->pfn() + pages_per_block(order));
+        // Move to the next block
+        current += pages_per_block(order);
+        page_count -= pages_per_block(order);
     }
-
-    dprintf("Free list after insertion:\n");
-    dump();
 }
 
 /**
@@ -130,43 +127,35 @@ void page_allocator_buddy::insert_free_block(int order, page &block_start) {
 }
 
 void page_allocator_buddy::remove_free_block(int order, page &block_start) {
-    // Ensure the order is within bounds.
     assert(order >= 0 && order <= LastOrder);
-
-    // Check the block's alignment for the specified order.
     assert(block_aligned(order, block_start.pfn()));
 
-    dprintf("Attempting to remove block at %lx with order %d\n", block_start.base_address(), order);
+    dprintf("Attempting to remove block at %lx (pfn: %llx) with order %d\n", block_start.base_address(), block_start.pfn(), order);
 
-    // Set up to find the target block in the free list.
     page *target = &block_start;
     page **candidate_slot = &free_list_[order];
 
-    // Debug output to check the contents of the free list before removal.
     dprintf("Free list at order %d before removal:\n", order);
     page *current = free_list_[order];
     while (current) {
-        dprintf("Block at %lx\n", current->base_address());
+        dprintf("Block at %lx (pfn: %llx)\n", current->base_address(), current->pfn());
         current = current->next_free_;
     }
 
-    // Traverse the free list looking for the target block.
     while (*candidate_slot && *candidate_slot != target) {
         candidate_slot = &((*candidate_slot)->next_free_);
     }
 
-    // If target block not found, trigger an assertion and dump the free list.
     if (*candidate_slot != target) {
-        dprintf("Error: Target block at %lx not found in free list at order %d\n", block_start.base_address(), order);
-        dump();  // Full dump of the free list state.
-        assert(false);  // Force failure to help locate issue.
+        dprintf("Error: Target block at %lx (pfn: %llx) not found in free list at order %d\n", block_start.base_address(), block_start.pfn(), order);
+        dump();
+        assert(false);
     }
 
-    // If found, remove the target block from the free list.
     *candidate_slot = target->next_free_;
     target->next_free_ = nullptr;
 
-    dprintf("Block at %lx successfully removed from order %d\n", block_start.base_address(), order);
+    dprintf("Block at %lx (pfn: %llx) successfully removed from order %d\n", block_start.base_address(), block_start.pfn(), order);
 }
 
 /**
