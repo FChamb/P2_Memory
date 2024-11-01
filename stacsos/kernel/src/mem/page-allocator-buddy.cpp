@@ -72,16 +72,13 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
  * @param page_count - Number of pages to remove
  */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
-    if (range_start.state_ != page_state::free) {
-        dprintf("Error: Attempting to remove a non-free page (PFN=%llu)\n", range_start.pfn());
-        panic("NO");
-    }
-
     u64 start_pfn = range_start.pfn();
     u64 end_pfn = start_pfn + page_count;
 
     while (start_pfn < end_pfn) {
         int order = LastOrder - 1;
+
+        // Find the order that fits within the page_count
         while (order >= 0 && (start_pfn + pages_per_block(order)) > end_pfn) {
             order--;
         }
@@ -90,11 +87,12 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
         page &block_start = page::get_from_pfn(start_pfn);
 
         // Debugging: Print the block being removed and its order
-        dprintf("Attempting to remove block: PFN=%llu, order=%d\n", start_pfn, order);
+        dprintf("Attempting to remove block: start_pfn=%llu, order=%d\n", start_pfn, order);
 
         // Attempt to remove the block from the free list
         remove_free_block(order, block_start);
 
+        // Move to the next block
         start_pfn += pages_per_block(order);
     }
 }
