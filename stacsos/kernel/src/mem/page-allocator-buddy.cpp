@@ -91,15 +91,15 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
         // Find the order of the current range_start
         int order = find_order(range_start);
         if (order == -1) {
-            // Handle the case where the range_start isn't found in free lists
-            return; // Or handle the error as appropriate
+            dprintf("Error: Range start (PFN=%lx) not found in any free list.\n", range_start.pfn());
+            return; // Handle the error as appropriate
         }
 
         // Check if the block at the current order is in the free list
         int index = find_index(order, range_start);
         if (index == -1) {
-            // Handle the case where the block is not found in the free list
-            return; // Or handle the error as appropriate
+            dprintf("Error: Block not found in free list for PFN=%lx, ORDER=%d\n", range_start.pfn(), order);
+            return; // Handle the error as appropriate
         }
 
         // Get the size of the block at the found order
