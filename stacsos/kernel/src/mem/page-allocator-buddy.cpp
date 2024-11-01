@@ -76,9 +76,9 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
     u64 end_pfn = start_pfn + page_count;
 
     while (start_pfn < end_pfn) {
+        // Find the appropriate order based on current PFN
         int order = LastOrder - 1;
 
-        // Find the order that fits within the page_count
         while (order >= 0 && (start_pfn + pages_per_block(order)) > end_pfn) {
             order--;
         }
@@ -105,12 +105,13 @@ void page_allocator_buddy::insert_free_block(int order, page &block_start) {
     page **slot = &free_list_[order];
 
     // Insert the block in sorted order in the free list.
-    while (*slot && (*slot)->pfn() < target->pfn()) {
+    while (*slot && *slot < target) {
         slot = &((*slot)->next_free_);
     }
 
-    target->next_free_ = *slot;
-    *slot = target;
+    target->next_free_ = *slot; // Link to the next block in the free list
+    *slot = target; // Update the head of the free list
+    dprintf("Inserted block: order=%d, start_pfn=%llu\n", order, target->pfn());
 }
 
 void page_allocator_buddy::remove_free_block(int order, page &block_start) {
