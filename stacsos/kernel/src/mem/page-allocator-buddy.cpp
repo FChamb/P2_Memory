@@ -72,8 +72,8 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
     u64 start_pfn = range_start.pfn();
     u64 end_pfn = start_pfn + page_count;
 
-    for (int order = LastOrder - 1; start_pfn < end_pfn; order--) {
-        // Identify the largest order that fits
+    while (start_pfn < end_pfn) {
+        int order = LastOrder - 1;
         while (order >= 0 && (start_pfn + pages_per_block(order)) > end_pfn) {
             order--;
         }
