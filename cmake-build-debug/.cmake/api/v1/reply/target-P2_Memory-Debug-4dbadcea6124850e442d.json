@@ -1,0 +1,1693 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "P2_Memory"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"include_directories"
+		],
+		"files" : 
+		[
+			"CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 33,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 6,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 7,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 8,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 9,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 10,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 11,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 12,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 13,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 14,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 15,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 16,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 17,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 18,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 19,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 20,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 21,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 22,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 23,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 24,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 25,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 26,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 27,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 28,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 29,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 30,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 31,
+				"parent" : 0
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -std=gnu++14 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk -mmacosx-version-min=15.0 -fcolor-diagnostics"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 2,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc"
+				},
+				{
+					"backtrace" : 3,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos"
+				},
+				{
+					"backtrace" : 4,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel"
+				},
+				{
+					"backtrace" : 5,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/arch"
+				},
+				{
+					"backtrace" : 6,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/arch/x86"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/arch/x86/boot"
+				},
+				{
+					"backtrace" : 8,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/arch/x86/irq"
+				},
+				{
+					"backtrace" : 9,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/dev"
+				},
+				{
+					"backtrace" : 10,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/dev/acpi"
+				},
+				{
+					"backtrace" : 11,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/dev/console"
+				},
+				{
+					"backtrace" : 12,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/dev/gfx"
+				},
+				{
+					"backtrace" : 13,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/dev/input"
+				},
+				{
+					"backtrace" : 14,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/dev/misc"
+				},
+				{
+					"backtrace" : 15,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/dev/pci"
+				},
+				{
+					"backtrace" : 16,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/dev/storage"
+				},
+				{
+					"backtrace" : 17,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/dev/timers"
+				},
+				{
+					"backtrace" : 18,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/dev/tty"
+				},
+				{
+					"backtrace" : 19,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/fs"
+				},
+				{
+					"backtrace" : 20,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/mem"
+				},
+				{
+					"backtrace" : 21,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/obj"
+				},
+				{
+					"backtrace" : 22,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/sched"
+				},
+				{
+					"backtrace" : 23,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/kernel/inc/stacsos/kernel/sched/alg"
+				},
+				{
+					"backtrace" : 24,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/lib/inc"
+				},
+				{
+					"backtrace" : 25,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/lib/inc/stacsos"
+				},
+				{
+					"backtrace" : 26,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/user/ulib/inc"
+				},
+				{
+					"backtrace" : 27,
+					"path" : "/Users/finneganchamberlain/Desktop/CS Work/CS3104/P2_Memory/stacsos/user/ulib/inc/stacsos"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					1
+				],
+				"standard" : "14"
+			},
+			"sourceIndexes" : 
+			[
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130,
+				131,
+				132,
+				133,
+				134,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				141,
+				142,
+				143,
+				144,
+				145,
+				146,
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155,
+				172,
+				173,
+				174,
+				175,
+				176,
+				177,
+				178,
+				179,
+				180,
+				186,
+				187,
+				188,
+				189,
+				190,
+				191,
+				192,
+				193
+			]
+		}
+	],
+	"id" : "P2_Memory::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "P2_Memory",
+	"nameOnDisk" : "P2_Memory",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				5,
+				6,
+				7,
+				8,
+				9,
+				10,
+				11,
+				12,
+				13,
+				14,
+				15,
+				16,
+				17,
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42,
+				43,
+				44,
+				45,
+				46,
+				47,
+				48,
+				49,
+				50,
+				51,
+				52,
+				53,
+				54,
+				55,
+				56,
+				57,
+				58,
+				59,
+				60,
+				61,
+				62,
+				63,
+				64,
+				65,
+				66,
+				67,
+				68,
+				69,
+				70,
+				71,
+				72,
+				73,
+				74,
+				75,
+				76,
+				77,
+				78,
+				79,
+				80,
+				81,
+				82,
+				83,
+				84,
+				85,
+				86,
+				87,
+				88,
+				156,
+				157,
+				158,
+				159,
+				160,
+				161,
+				162,
+				163,
+				164,
+				165,
+				166,
+				167,
+				168,
+				169,
+				170,
+				171,
+				181,
+				182,
+				183,
+				184,
+				185
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				89,
+				90,
+				91,
+				92,
+				93,
+				94,
+				95,
+				96,
+				97,
+				98,
+				99,
+				100,
+				101,
+				102,
+				103,
+				104,
+				105,
+				106,
+				107,
+				108,
+				109,
+				110,
+				111,
+				112,
+				113,
+				114,
+				115,
+				116,
+				117,
+				118,
+				119,
+				120,
+				121,
+				122,
+				123,
+				124,
+				125,
+				126,
+				127,
+				128,
+				129,
+				130,
+				131,
+				132,
+				133,
+				134,
+				135,
+				136,
+				137,
+				138,
+				139,
+				140,
+				141,
+				142,
+				143,
+				144,
+				145,
+				146,
+				147,
+				148,
+				149,
+				150,
+				151,
+				152,
+				153,
+				154,
+				155,
+				172,
+				173,
+				174,
+				175,
+				176,
+				177,
+				178,
+				179,
+				180,
+				186,
+				187,
+				188,
+				189,
+				190,
+				191,
+				192,
+				193
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/boot/multiboot.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/irq/irq-manager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/irq/irq-traps.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/cpuid-features.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/cpuid.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/cregs.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/dt.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/ioapic.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/machine-context.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/msr.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/page-table-structures.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/pio.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/pit.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/text-console.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/tsc.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/x2apic-structures.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/x2apic-timer.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/x2apic.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/x86-core.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/x86-page-table.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/x86/x86-platform.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/console-interface.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/core-manager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/core.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/irq-manager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/irq.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/platform.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/arch/timer.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/acpi/acpi.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/acpi/descriptors.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/console/console-font.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/console/physical-console.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/console/virtual-console.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/gfx/graphics.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/gfx/qemu-stdvga.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/input/keyboard.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/input/keys.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/misc/cmos-rtc.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/misc/rtc.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/pci/pci-device-config.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/pci/pci-device.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/pci/pci-express-bus.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/storage/ahci-controller.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/storage/ahci-storage-device.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/storage/ahci-structures.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/storage/block-device.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/timers/pit.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/timers/timer.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/tty/terminal.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/bus.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/devfs.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/device-class.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/device-manager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/dev/device.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/fs/file.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/fs/filesystem.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/fs/fs-node.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/fs/tar-filesystem.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/fs/vfs.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/address-space-region.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/address-space.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/large-object-allocator.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/memory-manager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/object-allocator.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/page-alloc-ref.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/page-allocator-buddy.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/page-allocator-linear.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/page-allocator.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/page-table-allocator.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/page-table.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/page.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/mem/slab-cache.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/obj/object-manager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/obj/object.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/sched/alg/rr.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/sched/alg/scheduling-algorithm.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/sched/alg/sfs.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/sched/event.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/sched/process-manager.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/sched/process.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/sched/schedulable-entity.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/sched/scheduler.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/sched/sleeper.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/sched/thread.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/config.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/debug.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/kernel-global.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/lock.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/kernel/inc/stacsos/kernel/log.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/boot/start.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/irq/irq-manager.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/bsod.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/cpuid.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/dt.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/ioapic.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/machine-context.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/pit.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/text-console.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/tsc.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/x2apic-timer.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/x2apic.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/x86-core.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/x86-page-table.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/x86/x86-platform.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/core-manager.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/arch/core.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/acpi/acpi.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/console/console-font.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/console/physical-console.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/console/virtual-console.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/gfx/graphics.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/gfx/qemu-stdvga.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/input/keyboard.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/misc/cmos-rtc.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/misc/rtc.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/pci/pci-device.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/pci/pci-express-bus.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/storage/ahci-controller.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/storage/ahci-storage-device.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/storage/block-device.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/tty/terminal.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/devfs.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/device-class.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/dev/device-manager.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/fs/filesystem.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/fs/fs-node.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/fs/tar-filesystem.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/fs/vfs.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/address-space-region.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/address-space.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/large-object-allocator.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/memory-manager.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/new.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/object-allocator.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/page-allocator-buddy.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/page-allocator-linear.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/page-allocator.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/page-table-allocator.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/mem/slab-cache.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/obj/object-manager.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/obj/object.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/sched/alg/rr.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/sched/alg/sfs.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/sched/event.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/sched/process-manager.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/sched/process.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/sched/scheduler.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/sched/sleeper.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/sched/thread.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/support/guard.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/config.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/debug.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/lock.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/log.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/main.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/kernel/src/syscall.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/atomic.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/avl-tree.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/bitset.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/elf.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/helpers.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/list.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/map.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/memops.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/memory.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/optional.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/printf.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/string.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/syscalls.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos/vector.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/global.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/lib/inc/stacsos-config.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/lib/src/printf.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/lib/src/string.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/cat/src/main.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/init/src/main.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/mandelbrot/src/main.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/poweroff/src/main.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/sched-test/src/main.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/sched-test2/src/main.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/shell/src/main.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/user/ulib/inc/stacsos/console.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/user/ulib/inc/stacsos/objects.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/user/ulib/inc/stacsos/process.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/user/ulib/inc/stacsos/threads.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "stacsos/user/ulib/inc/stacsos/user-syscall.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/ulib/src/console.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/ulib/src/entry.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/ulib/src/guard.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/ulib/src/mem.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/ulib/src/objects.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/ulib/src/process.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/ulib/src/support.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "stacsos/user/ulib/src/threads.cpp",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "EXECUTABLE"
+}
