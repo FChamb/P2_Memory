@@ -74,26 +74,36 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
  * @param page_count - Number of pages to remove
  */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
+    // Get the starting page frame number for the removal
     u64 start_pfn = range_start.pfn();
     u64 end_pfn = start_pfn + page_count;
 
+    // Traverse through all pages in the specified range
     while (start_pfn < end_pfn) {
-        // Find the highest order that can accommodate this range
-        int order = LastOrder - 1;
-        while (order >= 0 && (start_pfn + pages_per_block(order)) > end_pfn) {
-            order--;
+        int order = 0;
+
+        // Determine the appropriate order for the current block
+        while (order < LastOrder && !block_aligned(order, start_pfn)) {
+            order++;
         }
 
-        // Ensure we have a valid order
-        assert(order >= 0);
+        // Ensure we find the highest order that can be removed
+        while (order < LastOrder && (start_pfn + pages_per_block(order)) <= end_pfn) {
+            order++;
+        }
+
+        order--; // Step back to the last valid order
+
+        // Ensure order is valid
+        assert(order >= 0 && order <= LastOrder);
 
         // Get the page corresponding to the start_pfn
         page &block_start = page::get_from_pfn(start_pfn);
 
-        // Debugging: Print the block being removed and its order
-        dprintf("Removing block: start_pfn=%llu, order=%d\n", start_pfn, order);
+        // Debug information
+        dprintf("Attempting to remove block at PFN %llu with order %d\n", start_pfn, order);
 
-        // Attempt to remove the block from the free list
+        // Remove the block from the free list
         remove_free_block(order, block_start);
 
         // Move to the next block in the range
@@ -118,26 +128,28 @@ void page_allocator_buddy::insert_free_block(int order, page &block_start) {
 }
 
 void page_allocator_buddy::remove_free_block(int order, page &block_start) {
+    // Assert that order is in range
     assert(order >= 0 && order <= LastOrder);
     assert(block_aligned(order, block_start.pfn()));
 
     page *target = &block_start;
     page **candidate_slot = &free_list_[order];
 
-    // Traverse the list to find the target
+    // Traverse the free list to find the target block
     while (*candidate_slot && *candidate_slot != target) {
         candidate_slot = &((*candidate_slot)->next_free_);
     }
 
-    // Debugging: Check what is found in candidate_slot
+    // Print debug information if the target is not found
     if (*candidate_slot != target) {
-        dprintf("Error: Block to remove not found in free list for order %d. Block start PFN: %llu\n", order, block_start.pfn());
-        panic("Block not found in free list");
+        dprintf("Block to remove not found in free list: PFN %llu, order %d\n", block_start.pfn(), order);
+        return; // Optionally handle this case differently
     }
 
-    // Remove the block from the list
-    *candidate_slot = target->next_free_;
-    target->next_free_ = nullptr;  // Clear next_free_ of the removed block
+    // Found the block; remove it
+    *candidate_slot = target->next_free_; // Remove from the list
+    target->next_free_ = nullptr; // Clear the next pointer
+}
 }
 
 /**
