@@ -75,34 +75,27 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
  */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
     while (page_count > 0) {
-        // Find the order for the current starting page
+        // Find the order of the current range_start
         int order = find_order(range_start);
-
         if (order == -1) {
-            // If no order found, exit (block not in free list)
-            return; // Error: range_start is not in free list
+            // Handle the case where the range_start isn't found in free lists
+            return; // Or handle the error as appropriate
         }
 
-        // Calculate the block size for the found order
+        // Get the size of the block at the found order
         u64 block_size = pages_per_block(order);
 
-        // Check if we can remove a full block
-        if (block_size > page_count) {
-            // If the block size is greater than the remaining page count, exit
-            return; // Error: Not enough pages to remove
-        }
-
-        // Remove the block from the free list.
+        // Remove the block from the free list
         remove_free_block(order, range_start);
 
-        // Calculate the next page in the range to continue removing.
+        // Move the start page frame number by the size of the removed block
         u64 next_block_pfn = range_start.pfn() + block_size;
         range_start = page::get_from_pfn(next_block_pfn);
 
-        // Reduce the page count by the size of the removed block.
+        // Reduce the page count by the size of the removed block
         page_count -= block_size;
 
-        // Update the total count of free pages.
+        // Update the total count of free pages
         total_free_ -= block_size;
     }
 }
@@ -114,11 +107,13 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
  * @return - The order of the block if found, otherwise -1
  */
 int page_allocator_buddy::find_order(page &range_start) const {
-    for (int order = 0; order <= LastOrder; ++order) {
+    // Check all orders to find the order for the given range_start
+    for (int order = 0; order <= LastOrder; order++) {
         page *current = free_list_[order];
         while (current) {
-            if (current->base_address() == range_start.base_address()) {
-                return order; // Found the order containing range_start
+            // Check if current block includes range_start
+            if (current->base_address() <= range_start.base_address() && current->base_address() + pages_per_block(order) > range_start.base_address()) {
+                return order; // Found the order
             }
             current = current->next_free_;
         }
@@ -136,15 +131,13 @@ int page_allocator_buddy::find_order(page &range_start) const {
 int page_allocator_buddy::find_index(int order, page &range_start) const {
     page *current = free_list_[order];
     int index = 0;
-
     while (current) {
         if (current->base_address() == range_start.base_address()) {
-            return index; // Found the block
+            return index; // Found index of the block in the free list
         }
         current = current->next_free_;
         index++;
     }
-
     return -1; // Not found
 }
 
