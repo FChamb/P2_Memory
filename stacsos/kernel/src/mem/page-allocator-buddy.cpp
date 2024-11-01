@@ -61,6 +61,21 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
         // Insert the block into the appropriate free list
         insert_free_block(order, block_start);
 
+        // Attempt to merge buddies
+        while (order < LastOrder) {
+            u64 buddy_pfn = block_start.pfn() ^ pages_per_block(order);
+            page &buddy = page::get_from_pfn(buddy_pfn);
+
+            // Check if buddy is free and aligned
+            if (buddy.state_ != page_state::free || !block_aligned(order, buddy.pfn())) {
+                break;
+            }
+
+            // Merge the block with its buddy and move to the next order
+            merge_buddies(order, block_start);
+            order++;
+        }
+
         // Move the start pfn by the size of this block to continue with the next segment
         start_pfn += pages_per_block(order);
     }
