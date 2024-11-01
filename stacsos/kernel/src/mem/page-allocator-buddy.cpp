@@ -76,23 +76,30 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
     u64 end_pfn = start_pfn + page_count;
 
     while (start_pfn < end_pfn) {
-        // Find the appropriate order based on current PFN
-        int order = LastOrder - 1;
+        // Calculate the order based on the start PFN
+        int order = 0;
 
-        while (order >= 0 && (start_pfn + pages_per_block(order)) > end_pfn) {
-            order--;
+        // Find the correct order for the current PFN
+        while (order < LastOrder && (start_pfn % pages_per_block(order)) != 0) {
+            order++;
         }
 
-        assert(order >= 0);
+        // Check if we found a valid order
+        if (order >= LastOrder) {
+            dprintf("Error: Invalid order for PFN=%llu\n", start_pfn);
+            return; // Exit if the order is invalid
+        }
+
+        // Prepare the block's start page
         page &block_start = page::get_from_pfn(start_pfn);
 
-        // Debugging: Print the block being removed and its order
-        dprintf("Attempting to remove block: start_pfn=%llu, order=%d\n", start_pfn, order);
+        // Debugging: Print the block being removed
+        dprintf("Removing block: start_pfn=%llu, order=%d\n", start_pfn, order);
 
-        // Attempt to remove the block from the free list
+        // Remove the block (you may need to adjust how this affects your free list)
         remove_free_block(order, block_start);
 
-        // Move to the next block
+        // Move to the next block (based on the size of the block)
         start_pfn += pages_per_block(order);
     }
 }
