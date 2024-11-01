@@ -47,20 +47,20 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
     while (remaining_pages > 0) {
         int order = LastOrder;
 
-        // Find the largest order that fits within remaining_pages and is aligned
+        // Adjust order for alignment and size.
         while (order > 0 && (pages_per_block(order) > remaining_pages || !block_aligned(order, current->pfn()))) {
             order--;
         }
 
         dprintf("Inserting block at %lx with order %d\n", current->base_address(), order);
 
-        // Set the block's free block size to match its order
+        // Ensure alignment.
+        assert(block_aligned(order, current->pfn()));
+
         current->free_block_size_ = pages_per_block(order);
 
-        // Insert the current block into the free list
         insert_free_block(order, *current);
 
-        // Move to the next block in the range
         remaining_pages -= pages_per_block(order);
         current = &page::get_from_pfn(current->pfn() + pages_per_block(order));
     }
@@ -130,32 +130,31 @@ void page_allocator_buddy::insert_free_block(int order, page &block_start) {
 }
 
 void page_allocator_buddy::remove_free_block(int order, page &block_start) {
+    // Validate that the order is within range.
     assert(order >= 0 && order <= LastOrder);
+
+    // Check alignment for this order.
     assert(block_aligned(order, block_start.pfn()));
 
+    dprintf("Attempting to remove block at %lx with order %d\n", block_start.base_address(), order);
+
+    // Begin searching in the free list for the specified order.
     page *target = &block_start;
     page **candidate_slot = &free_list_[order];
 
-    dprintf("Attempting to remove block at %lx with order %d\n", block_start.base_address(), order);
-    dprintf("Free list at order %d before removal:\n", order);
-
-    // Traverse the list to display the current state at the given order
-    page *current = free_list_[order];
-    while (current) {
-        dprintf("Block at %lx\n", current->base_address());
-        current = current->next_free_;
-    }
-
-    // Traverse the free list to locate the target
+    // Traverse the free list at this order.
     while (*candidate_slot && *candidate_slot != target) {
         candidate_slot = &((*candidate_slot)->next_free_);
     }
 
+    // Confirm that the target block was found.
     if (*candidate_slot != target) {
         dprintf("Error: Target block at %lx not found in free list at order %d\n", block_start.base_address(), order);
+        dump();  // Display current state of the free list to help diagnose issues.
+        assert(false);  // Fail the assertion to indicate inconsistency.
     }
-    assert(*candidate_slot == target);
 
+    // Remove the target block from the free list.
     *candidate_slot = target->next_free_;
     target->next_free_ = nullptr;
 }
