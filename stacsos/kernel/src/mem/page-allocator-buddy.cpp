@@ -46,17 +46,15 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
 
     while (remaining_pages > 0) {
         int order = LastOrder;
-        // Find the largest order that fits within remaining_pages
-        while (pages_per_block(order) > remaining_pages) {
+
+        // Find the largest order that fits within remaining_pages and is aligned
+        while (order > 0 && (pages_per_block(order) > remaining_pages || !block_aligned(order, current->pfn()))) {
             order--;
         }
 
         dprintf("Inserting block at %lx with order %d\n", current->base_address(), order);
 
-        // Align current to the appropriate order if needed
-        assert(block_aligned(order, current->pfn()));
-
-        // Set the block's free block size
+        // Set the block's free block size to match its order
         current->free_block_size_ = pages_per_block(order);
 
         // Insert the current block into the free list
