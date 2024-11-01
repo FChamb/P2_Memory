@@ -236,19 +236,26 @@ void page_allocator_buddy::free_pages(page &block_start, int order) {
     // Ensure order is within range
     assert(order >= 0 && order <= LastOrder);
 
+    // Set the block state to free
     block_start.state_ = page_state::free;
+
+    // Insert the block into the free list at the specified order
     insert_free_block(order, block_start);
+
+    // Update total free pages
     total_free_ += pages_per_block(order);
 
-    // Attempt to merge with buddies
+    // Attempt to merge the freed block with its buddy recursively
     while (order < LastOrder) {
         u64 buddy_pfn = block_start.pfn() ^ pages_per_block(order);
         page &buddy = page::get_from_pfn(buddy_pfn);
 
+        // Check if the buddy is free and aligned
         if (buddy.state_ != page_state::free || !block_aligned(order, buddy.pfn())) {
             break;
         }
 
+        // Merge the block and its buddy
         merge_buddies(order, block_start);
         order++;
     }
