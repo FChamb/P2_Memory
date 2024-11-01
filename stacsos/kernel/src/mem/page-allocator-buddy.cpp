@@ -69,40 +69,25 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
  * @param page_count - Number of pages to remove
  */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
-    // Calculate the order based on the number of pages to be removed
-    int order = 0;
-    while (page_count > pages_per_block(order)) {
-        order++;
-    }
+    u64 start_pfn = range_start.pfn();
+    u64 end_pfn = start_pfn + page_count;
 
-    // Ensure we are not trying to remove more pages than are allowed
-    assert(order <= LastOrder && "Trying to remove pages beyond last order.");
+    for (int order = LastOrder - 1; start_pfn < end_pfn; order--) {
+        // Identify the largest order that fits
+        while (order >= 0 && (start_pfn + pages_per_block(order)) > end_pfn) {
+            order--;
+        }
 
-    // Convert range_start to a page frame number (PFN)
-    u64 pfn_start = range_start.pfn();
+        assert(order >= 0);
+        page &block_start = page::get_from_pfn(start_pfn);
 
-    // Validate that the starting address and page count are aligned
-    assert(block_aligned(order, pfn_start) && "Range start is not block aligned.");
-    assert(block_aligned(order, pfn_start + page_count) && "Page count is not block aligned.");
+        // Debugging: Print the block being removed and its order
+        dprintf("Removing block: start_pfn=%llu, order=%d\n", start_pfn, order);
 
-    // Check if we are removing an entire block
-    if (page_count != pages_per_block(order)) {
-        dprintf("Can only remove entire blocks in buddy system.");
-        return; // Alternatively, you might want to panic or handle this differently
-    }
+        // Attempt to remove the block from the free list
+        remove_free_block(order, block_start);
 
-    // Free the pages by adding them back to the free list
-    remove_free_block(order, range_start);
-
-    // Merge with buddy if possible
-    page buddy = page::get_from_pfn(pfn_start ^ pages_per_block(order)); // Find the buddy
-    if (buddy.state_ == page_state::free) {
-        // Both current block and buddy are free, merge them
-        merge_buddies(order, buddy);
-    } else {
-        // Update the state to allocated or anything as per the design
-        range_start.state_ = page_state::free; // Mark the block as free
-        range_start.refcount_ = 0; // Reset reference count
+        start_pfn += pages_per_block(order);
     }
 }
 
