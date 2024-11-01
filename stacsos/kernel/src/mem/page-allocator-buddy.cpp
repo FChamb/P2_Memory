@@ -39,9 +39,17 @@ void page_allocator_buddy::dump() const {
  * @param page_count - Number of pages to insert
  */
 void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
+    // Ensure range_start is aligned to the largest order.
+    int order = LastOrder;
+    u64 block_size = pages_per_block(order);
+
+    // Align range_start to the block size for the highest order
+    u64 aligned_pfn = range_start.pfn() & ~(block_size - 1);
+    range_start = page::get_from_pfn(aligned_pfn);
+
     while (page_count > 0) {
-        int order = LastOrder;
-        u64 block_size = pages_per_block(order);
+        // Adjust the block size for the current order.
+        block_size = pages_per_block(order);
 
         // Find the largest block that fits into the remaining page count.
         while (block_size > page_count && order > 0) {
