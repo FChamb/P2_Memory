@@ -39,15 +39,12 @@ void page_allocator_buddy::dump() const {
  * @param page_count - Number of pages to insert
  */
 void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
-    int order = LastOrder;
-
-    // Remove pages until no pages remain in range
     while (page_count > 0) {
-        // Find the block size for the current order
+        int order = LastOrder;
         u64 block_size = pages_per_block(order);
 
         // Find the largest block that fits into the remaining page count.
-        while (block_size > page_count) {
+        while (block_size > page_count && order > 0) {
             order--;
             block_size = pages_per_block(order);
         }
@@ -61,8 +58,6 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
 
         // Reduce the page count by the size of the inserted block.
         page_count -= block_size;
-
-        // Update the total count of free pages.
         total_free_ += block_size;
     }
 }
@@ -75,14 +70,12 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
  * @param page_count - Number of pages to remove
  */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
-    int order = LastOrder;
-
-    // Remove pages until no pages remain in range
     while (page_count > 0) {
+        int order = LastOrder;
         u64 block_size = pages_per_block(order);
 
         // Find the largest block that fits into the remaining page count.
-        while (block_size > page_count) {
+        while (block_size > page_count && order > 0) {
             order--;
             block_size = pages_per_block(order);
         }
@@ -96,26 +89,21 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
 
         // Reduce the page count by the size of the removed block.
         page_count -= block_size;
-
-        // Update the total count of free pages.
         total_free_ -= block_size;
     }
 }
 
 void page_allocator_buddy::insert_free_block(int order, page &block_start) {
-    // assert order in range
     assert(order >= 0 && order <= LastOrder);
-
-    // assert block_start aligned to order
     assert(block_aligned(order, block_start.pfn()));
 
     page *target = &block_start;
     page **slot = &free_list_[order];
+
+    // Insert the block in sorted order in the free list.
     while (*slot && *slot < target) {
         slot = &((*slot)->next_free_);
     }
-
-    assert(*slot != target);
 
     target->next_free_ = *slot;
     *slot = target;
@@ -236,26 +224,19 @@ void page_allocator_buddy::free_pages(page &block_start, int order) {
     // Ensure order is within range
     assert(order >= 0 && order <= LastOrder);
 
-    // Set the block state to free
     block_start.state_ = page_state::free;
-
-    // Insert the block into the free list at the specified order
     insert_free_block(order, block_start);
-
-    // Update total free pages
     total_free_ += pages_per_block(order);
 
-    // Attempt to merge the freed block with its buddy recursively
+    // Attempt to merge with buddies
     while (order < LastOrder) {
         u64 buddy_pfn = block_start.pfn() ^ pages_per_block(order);
         page &buddy = page::get_from_pfn(buddy_pfn);
 
-        // Check if the buddy is free and aligned
         if (buddy.state_ != page_state::free || !block_aligned(order, buddy.pfn())) {
             break;
         }
 
-        // Merge the block and its buddy
         merge_buddies(order, block_start);
         order++;
     }
