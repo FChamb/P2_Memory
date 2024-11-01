@@ -126,21 +126,32 @@ void page_allocator_buddy::insert_free_block(int order, page &block_start) {
 }
 
 void page_allocator_buddy::remove_free_block(int order, page &block_start) {
-    // assert order in range
+    // Ensure the order is within range
     assert(order >= 0 && order <= LastOrder);
 
-    // assert block_start aligned to order
+    // Ensure block_start is aligned for the order
     assert(block_aligned(order, block_start.pfn()));
 
     page *target = &block_start;
     page **candidate_slot = &free_list_[order];
+
+    // Debug output: print the free list before attempting removal
+    dprintf("Attempting to remove block at address %lx with order %d\n", block_start.base_address(), order);
+    dprintf("Free list before removal:\n");
+    dump(); // Assuming `dump()` provides a summary of the free list.
+
+    // Traverse the free list to find the target
     while (*candidate_slot && *candidate_slot != target) {
         candidate_slot = &((*candidate_slot)->next_free_);
     }
 
-    // assert candidate block exists
+    // Assert that the candidate slot actually contains the target
+    if (*candidate_slot != target) {
+        dprintf("Error: Target block at %lx not found in free list at order %d\n", block_start.base_address(), order);
+    }
     assert(*candidate_slot == target);
 
+    // Remove the target from the list
     *candidate_slot = target->next_free_;
     target->next_free_ = nullptr;
 }
