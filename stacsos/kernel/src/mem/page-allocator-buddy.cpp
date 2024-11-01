@@ -117,8 +117,7 @@ int page_allocator_buddy::find_order(page &range_start) const {
     for (int order = 0; order <= LastOrder; ++order) {
         page *current = free_list_[order];
         while (current) {
-            // Check if the current page address matches range_start
-            if (current->base_address() == range_start.base_address() && block_aligned(order, current->pfn())) {
+            if (current->base_address() == range_start.base_address()) {
                 return order; // Found the order containing range_start
             }
             current = current->next_free_;
