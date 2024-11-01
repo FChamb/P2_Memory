@@ -39,31 +39,30 @@ void page_allocator_buddy::dump() const {
  * @param page_count - Number of pages to insert
  */
 void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
-    int order = LastOrder;
+    // Calculate the starting page frame number
+    u64 start_pfn = range_start.pfn();
+    u64 end_pfn = start_pfn + page_count;
 
-    // Remove pages until no pages remain in range
-    while (page_count > 0) {
-        // Find the block size for the current order
-        u64 block_size = pages_per_block(order);
+    // Traverse through all pages in the range to insert
+    while (start_pfn < end_pfn) {
+        int order = LastOrder;
 
-        // Find the largest block that fits into the remaining page count.
-        while (block_size > page_count) {
+        // Find the largest possible order for the current block that does not exceed boundaries
+        while (order > 0 && ((start_pfn + pages_per_block(order)) > end_pfn || !block_aligned(order, start_pfn))) {
             order--;
-            block_size = pages_per_block(order);
         }
 
-        // Insert the block at the given order.
-        insert_free_block(order, range_start);
+        // Get the page corresponding to this start_pfn
+        page &block_start = page::get_from_pfn(start_pfn);
 
-        // Calculate the next page in the range to continue inserting.
-        u64 next_block_pfn = range_start.pfn() + block_size;
-        range_start = page::get_from_pfn(next_block_pfn);
+        // Set the free block size to current order (for later reference)
+        block_start.free_block_size_ = pages_per_block(order);
 
-        // Reduce the page count by the size of the inserted block.
-        page_count -= block_size;
+        // Insert the block into the appropriate free list
+        insert_free_block(order, block_start);
 
-        // Update the total count of free pages.
-        total_free_ += block_size;
+        // Move the start pfn by the size of this block to continue with the next segment
+        start_pfn += pages_per_block(order);
     }
 }
 
@@ -232,6 +231,12 @@ page *page_allocator_buddy::allocate_pages(int order, page_allocation_flags flag
     return allocated_block;
 }
 
+/**
+ * Frees a block of pages and attempts to merge with buddies to form larger blocks.
+ *
+ * @param block_start - Starting page of the block to free
+ * @param order - Order of the block to free
+ */
 void page_allocator_buddy::free_pages(page &block_start, int order) {
     // Ensure order is within range
     assert(order >= 0 && order <= LastOrder);
@@ -245,10 +250,12 @@ void page_allocator_buddy::free_pages(page &block_start, int order) {
         u64 buddy_pfn = block_start.pfn() ^ pages_per_block(order);
         page &buddy = page::get_from_pfn(buddy_pfn);
 
+        // Check if buddy is free and aligned
         if (buddy.state_ != page_state::free || !block_aligned(order, buddy.pfn())) {
             break;
         }
 
+        // Merge the block with its buddy and move to the next order
         merge_buddies(order, block_start);
         order++;
     }
