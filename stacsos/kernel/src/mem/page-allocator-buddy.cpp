@@ -87,7 +87,7 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
 
     // Check if we are removing an entire block
     if (page_count != pages_per_block(order)) {
-        std::cerr << "Can only remove entire blocks in buddy system." << std::endl;
+        dprintf("Can only remove entire blocks in buddy system.");
         return; // Alternatively, you might want to panic or handle this differently
     }
 
