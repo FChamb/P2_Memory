@@ -39,30 +39,29 @@ void page_allocator_buddy::dump() const {
  * @param page_count - Number of pages to insert
  */
 void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
-    // Calculate the starting page frame number
     u64 start_pfn = range_start.pfn();
     u64 end_pfn = start_pfn + page_count;
 
-    // Traverse through all pages in the range to insert
     while (start_pfn < end_pfn) {
-        int order = LastOrder;
-
-        // Find the largest possible order for the current block that does not exceed boundaries
-        while (order > 0 && ((start_pfn + pages_per_block(order)) > end_pfn || !block_aligned(order, start_pfn))) {
-            order--;
+        // Determine the largest block size that fits within the range
+        int order = 0;
+        u64 max_block_size = 1;
+        while ((start_pfn + max_block_size <= end_pfn) && block_aligned(order, start_pfn) && order < LastOrder) {
+            order++;
+            max_block_size <<= 1;
         }
+        order--;
+        max_block_size >>= 1;
 
-        // Get the page corresponding to this start_pfn
+        // Retrieve the block starting page
         page &block_start = page::get_from_pfn(start_pfn);
-
-        // Set the free block size to current order (for later reference)
-        block_start.free_block_size_ = pages_per_block(order);
+        block_start.free_block_size_ = max_block_size;
 
         // Insert the block into the appropriate free list
         insert_free_block(order, block_start);
 
-        // Move the start pfn by the size of this block to continue with the next segment
-        start_pfn += pages_per_block(order);
+        // Move start_pfn forward by the size of the inserted block
+        start_pfn += max_block_size;
     }
 }
 
@@ -74,28 +73,35 @@ void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
  * @param page_count - Number of pages to remove
  */
 void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
-    // Calculate the starting and ending page frame numbers for the range
     u64 start_pfn = range_start.pfn();
     u64 end_pfn = start_pfn + page_count;
 
-    // Traverse through all pages in the range to remove
     while (start_pfn < end_pfn) {
-        // Fetch the starting page of the current block
+        // Get the current page to remove from free list
         page &block_start = page::get_from_pfn(start_pfn);
 
-        // Determine the block's order based on its free block size
+        // Determine block order based on `free_block_size_`
         int order = 0;
-        while ((order <= LastOrder) && (pages_per_block(order) != block_start.free_block_size_)) {
-            order++;
+        u64 block_size = block_start.free_block_size_;
+        if (block_size > 0) {
+            // Calculate the order if `free_block_size_` is set
+            while ((1ULL << order) < block_size) {
+                order++;
+            }
+        } else {
+            // Fallback to alignment-based order calculation if `free_block_size_` is zero
+            while (order <= LastOrder && !block_aligned(order, start_pfn)) {
+                order++;
+            }
         }
 
-        // Ensure we found a valid order, otherwise, there is an inconsistency
+        // Ensure order is within bounds
         assert(order <= LastOrder);
 
-        // Remove this block from the corresponding free list
+        // Remove block from the free list at determined order
         remove_free_block(order, block_start);
 
-        // Move start_pfn to the next block in the range based on its size
+        // Move to the next block based on the current block's size
         start_pfn += pages_per_block(order);
     }
 }
