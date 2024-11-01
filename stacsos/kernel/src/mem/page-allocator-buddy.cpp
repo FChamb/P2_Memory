@@ -235,6 +235,12 @@ void page_allocator_buddy::free_pages(page &block_start, int order) {
     // Ensure order is within range
     assert(order >= 0 && order <= LastOrder);
 
+    // Check if the block is already free
+    if (block_start.state_ != page_state::allocated) {
+        dprintf("Warning: Attempting to free an already free block: PFN=%llu\n", block_start.pfn());
+        return;  // Optionally handle this case, or panic if desired
+    }
+
     block_start.state_ = page_state::free;
     insert_free_block(order, block_start);
     total_free_ += pages_per_block(order);
@@ -245,7 +251,7 @@ void page_allocator_buddy::free_pages(page &block_start, int order) {
         page &buddy = page::get_from_pfn(buddy_pfn);
 
         if (buddy.state_ != page_state::free || !block_aligned(order, buddy.pfn())) {
-            break;
+            break;  // Stop merging if buddy is not free or misaligned
         }
 
         merge_buddies(order, block_start);
