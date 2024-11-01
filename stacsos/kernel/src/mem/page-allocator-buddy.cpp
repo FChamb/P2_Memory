@@ -39,27 +39,29 @@ void page_allocator_buddy::dump() const {
  * @param page_count - Number of pages to insert
  */
 void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
+    // Calculate the starting page frame number
     u64 start_pfn = range_start.pfn();
     u64 end_pfn = start_pfn + page_count;
 
+    // Traverse through all pages in the range to insert
     while (start_pfn < end_pfn) {
-        // Determine the highest order block we can create from the pages
-        int order = 0;
-        while (order <= LastOrder && (start_pfn + pages_per_block(order)) <= end_pfn) {
-            order++;
-        }
-        order--;  // Adjust to the last valid order
+        int order = LastOrder;
 
-        // Get the page corresponding to the start_pfn
+        // Find the largest possible order for the current block that does not exceed boundaries
+        while (order > 0 && ((start_pfn + pages_per_block(order)) > end_pfn || !block_aligned(order, start_pfn))) {
+            order--;
+        }
+
+        // Get the page corresponding to this start_pfn
         page &block_start = page::get_from_pfn(start_pfn);
 
-        // Debugging: Print the block being inserted and its order
-        dprintf("Inserting block: start_pfn=%llu, order=%d\n", start_pfn, order);
+        // Set the free block size to current order (for later reference)
+        block_start.free_block_size_ = pages_per_block(order);
 
-        // Insert the block into the free list
+        // Insert the block into the appropriate free list
         insert_free_block(order, block_start);
 
-        // Move to the next block in the range
+        // Move the start pfn by the size of this block to continue with the next segment
         start_pfn += pages_per_block(order);
     }
 }
