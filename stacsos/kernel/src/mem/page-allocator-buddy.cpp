@@ -30,16 +30,6 @@ void page_allocator_buddy::dump() const {
     }
 }
 
-void page_allocator_buddy::dump_free_list(int order) const {
-    dprintf("Free list for order %d: ", order);
-    page *c = free_list_[order];
-    while (c) {
-        dprintf("%llu ", c->pfn());
-        c = c->next_free_;
-    }
-    dprintf("\n");
-}
-
 /**
  * Inserts a range of pages into the free lists, breaking them down into the
  * largest blocks that fit within the remaining page count. Each block is added
@@ -82,7 +72,7 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
     u64 start_pfn = range_start.pfn();
     u64 end_pfn = start_pfn + page_count;
 
-    for (int order = LastOrder - 1; start_pfn < end_pfn; ) {
+    for (int order = LastOrder - 1; start_pfn < end_pfn; order--) {
         // Identify the largest order that fits
         while (order >= 0 && (start_pfn + pages_per_block(order)) > end_pfn) {
             order--;
@@ -90,9 +80,6 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
 
         assert(order >= 0);
         page &block_start = page::get_from_pfn(start_pfn);
-
-        // Dump current free list state
-        dump_free_list(order);
 
         // Debugging: Print the block being removed and its order
         dprintf("Removing block: start_pfn=%llu, order=%d\n", start_pfn, order);
