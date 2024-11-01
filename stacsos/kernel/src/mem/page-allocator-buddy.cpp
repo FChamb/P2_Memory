@@ -39,30 +39,36 @@ void page_allocator_buddy::dump() const {
  * @param page_count - Number of pages to insert
  */
 void page_allocator_buddy::insert_pages(page &range_start, u64 page_count) {
-    u64 start_pfn = range_start.pfn();
-    u64 end_pfn = start_pfn + page_count;
+    dprintf("Inserting pages starting at %lx, count: %llu\n", range_start.base_address(), page_count);
 
-    while (start_pfn < end_pfn) {
-        // Determine the largest block size that fits within the range
-        int order = 0;
-        u64 max_block_size = 1;
-        while ((start_pfn + max_block_size <= end_pfn) && block_aligned(order, start_pfn) && order < LastOrder) {
-            order++;
-            max_block_size <<= 1;
+    u64 remaining_pages = page_count;
+    page *current = &range_start;
+
+    while (remaining_pages > 0) {
+        int order = LastOrder;
+        // Find the largest order that fits within remaining_pages
+        while (pages_per_block(order) > remaining_pages) {
+            order--;
         }
-        order--;
-        max_block_size >>= 1;
 
-        // Retrieve the block starting page
-        page &block_start = page::get_from_pfn(start_pfn);
-        block_start.free_block_size_ = max_block_size;
+        dprintf("Inserting block at %lx with order %d\n", current->base_address(), order);
 
-        // Insert the block into the appropriate free list
-        insert_free_block(order, block_start);
+        // Align current to the appropriate order if needed
+        assert(block_aligned(order, current->pfn()));
 
-        // Move start_pfn forward by the size of the inserted block
-        start_pfn += max_block_size;
+        // Set the block's free block size
+        current->free_block_size_ = pages_per_block(order);
+
+        // Insert the current block into the free list
+        insert_free_block(order, *current);
+
+        // Move to the next block in the range
+        remaining_pages -= pages_per_block(order);
+        current = &page::get_from_pfn(current->pfn() + pages_per_block(order));
     }
+
+    dprintf("Free list after insertion:\n");
+    dump();
 }
 
 /**
@@ -107,36 +113,22 @@ void page_allocator_buddy::remove_pages(page &range_start, u64 page_count) {
 }
 
 void page_allocator_buddy::insert_free_block(int order, page &block_start) {
-    dprintf("Inserting pages starting at %lx, count: %llu\n", range_start.base_address(), page_count);
+    // assert order in range
+    assert(order >= 0 && order <= LastOrder);
 
-    u64 remaining_pages = page_count;
-    page *current = &range_start;
+    // assert block_start aligned to order
+    assert(block_aligned(order, block_start.pfn()));
 
-    while (remaining_pages > 0) {
-        int order = LastOrder;
-        // Find the largest order that fits within remaining_pages
-        while (pages_per_block(order) > remaining_pages) {
-            order--;
-        }
-
-        dprintf("Inserting block at %lx with order %d\n", current->base_address(), order);
-
-        // Align current to the appropriate order if needed
-        assert(block_aligned(order, current->pfn()));
-
-        // Set the block's free block size
-        current->free_block_size_ = pages_per_block(order);
-
-        // Insert the current block into the free list
-        insert_free_block(order, *current);
-
-        // Move to the next block in the range
-        remaining_pages -= pages_per_block(order);
-        current = &page::get_from_pfn(current->pfn() + pages_per_block(order));
+    page *target = &block_start;
+    page **slot = &free_list_[order];
+    while (*slot && *slot < target) {
+        slot = &((*slot)->next_free_);
     }
 
-    dprintf("Free list after insertion:\n");
-    dump();
+    assert(*slot != target);
+
+    target->next_free_ = *slot;
+    *slot = target;
 }
 
 void page_allocator_buddy::remove_free_block(int order, page &block_start) {
